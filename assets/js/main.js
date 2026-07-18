@@ -9,6 +9,13 @@ if (toggle && nav) {
     const open = nav.classList.toggle('open');
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('open')) {
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
+  });
 }
 
 // Reveal on scroll
@@ -27,8 +34,12 @@ const filterBtns = document.querySelectorAll('.plan-filters button');
 const plans = document.querySelectorAll('.plan');
 filterBtns.forEach((btn) => {
   btn.addEventListener('click', () => {
-    filterBtns.forEach((b) => b.classList.remove('active'));
+    filterBtns.forEach((b) => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
     const f = btn.dataset.filter;
     plans.forEach((p) => {
       p.classList.toggle('hidden', f !== 'all' && p.dataset.type !== f);
@@ -40,16 +51,47 @@ filterBtns.forEach((btn) => {
 const lightbox = document.querySelector('.lightbox');
 if (lightbox) {
   const lbImg = lightbox.querySelector('img');
+  const closeBtn = lightbox.querySelector('.lightbox-close');
+  let opener = null;
+
+  const closeLightbox = () => {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    if (opener) opener.focus();
+  };
+
   document.querySelectorAll('.plan img').forEach((img) => {
-    img.addEventListener('click', () => {
+    img.setAttribute('role', 'button');
+    img.setAttribute('tabindex', '0');
+    img.setAttribute('aria-label', `Enlarge ${img.alt}`);
+    const openLightbox = () => {
+      opener = img;
       lbImg.src = img.src;
       lbImg.alt = img.alt;
       lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+    img.addEventListener('click', openLightbox);
+    img.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox();
+      }
     });
   });
-  lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  lightbox.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      closeBtn.focus();
+    }
+  });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') lightbox.classList.remove('open');
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
   });
 }
 
