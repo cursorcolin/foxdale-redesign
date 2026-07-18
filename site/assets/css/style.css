@@ -25,7 +25,12 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 120px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 body {
   font-family: var(--sans);
@@ -34,6 +39,7 @@ body {
   color: var(--ink);
   background: var(--cream);
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(30, 79, 58, 0.12);
 }
 
 img { max-width: 100%; display: block; }
@@ -98,7 +104,9 @@ em.brand, .brand-italic { font-style: italic; }
   transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
-.btn:hover { transform: translateY(-1px); }
+@media (hover: hover) {
+  .btn:hover { transform: translateY(-1px); }
+}
 
 .btn-solid { background: var(--green-deep); color: #fff; border: 2px solid var(--green-deep); }
 .btn-solid:hover { background: var(--green-ink); border-color: var(--green-ink); }
@@ -375,7 +383,9 @@ section.band.green h2, section.band.green h3 { color: #fff; }
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+@media (hover: hover) {
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+}
 
 .card .thumb { aspect-ratio: 3 / 2; overflow: hidden; }
 .card .thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -518,7 +528,9 @@ section.band.green h2, section.band.green h3 { color: #fff; }
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.plan:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+@media (hover: hover) {
+  .plan:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+}
 
 .plan img { width: 100%; height: auto; cursor: zoom-in; }
 
@@ -735,6 +747,7 @@ section.band.green h2, section.band.green h3 { color: #fff; }
 /* ---------- Contact / visit ---------- */
 
 .contact-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: start; }
+.contact-grid > * { min-width: 0; }
 
 .info-card {
   background: var(--paper);
@@ -755,6 +768,8 @@ section.band.green h2, section.band.green h3 { color: #fff; }
 
 .info-card .row:last-child { border-bottom: none; }
 .info-card .row .k { flex: 0 0 120px; font-weight: 700; color: var(--green-deep); font-size: 14px; letter-spacing: 1.4px; text-transform: uppercase; padding-top: 3px; }
+.info-card .row > span:last-child { min-width: 0; }
+.info-card a { overflow-wrap: anywhere; }
 
 form.visit label {
   display: block;
@@ -955,16 +970,8 @@ footer.site a:hover { color: #fff; text-decoration: underline; }
 
 /* ---------- Responsive ---------- */
 
-@media (max-width: 1020px) {
-  .mvv, .checkcols { grid-template-columns: repeat(2, 1fr); }
-  .steps { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-  .people { grid-template-columns: repeat(2, 1fr); }
-  .funds { grid-template-columns: repeat(2, 1fr); }
-  .roster { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 860px) {
+@media (max-width: 1080px) {
+  /* The full nav + logo need ~1080px of room; below that, switch to the menu button */
   nav.primary {
     display: none;
     position: absolute;
@@ -978,11 +985,26 @@ footer.site a:hover { color: #fff; text-decoration: underline; }
     padding: 12px 20px 22px;
     gap: 2px;
     box-shadow: var(--shadow);
+    max-height: calc(100dvh - 96px);
+    overflow-y: auto;
   }
   nav.primary.open { display: flex; }
   nav.primary a { padding: 14px 12px; font-size: 17px; }
+  nav.primary a.active { box-shadow: inset 4px 0 0 var(--sage); background: var(--sage-wash); border-radius: 0 3px 3px 0; }
   nav.primary a.nav-cta { margin-left: 0; margin-top: 10px; text-align: center; }
   .nav-toggle { display: block; }
+}
+
+@media (max-width: 1020px) {
+  .mvv, .checkcols { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .people { grid-template-columns: repeat(2, 1fr); }
+  .funds { grid-template-columns: repeat(2, 1fr); }
+  .roster { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 860px) {
   .split, .split.reverse { grid-template-columns: 1fr; gap: 40px; }
   .split .photo::before { display: none; }
   .plans, .contracts, .contact-grid, .map-legend, .checkcols.two { grid-template-columns: 1fr; }
@@ -992,12 +1014,27 @@ footer.site a:hover { color: #fff; text-decoration: underline; }
   .utility .secondary a:not(:last-of-type),
   .utility .secondary .sep { display: none; }
   .cards { grid-template-columns: 1fr; }
+  .page-hero { min-height: 300px; }
+  .page-hero .wrap { padding-top: 80px; padding-bottom: 38px; }
+  .page-hero p { font-size: 18px; }
+}
+
+@media (max-width: 700px) {
+  .cards.two { grid-template-columns: 1fr; }
+  .contract { padding: 34px 26px; }
+  .info-card { padding: 30px 24px; }
+  .quoteband { padding: 60px 20px; }
 }
 
 @media (max-width: 560px) {
+  .wrap { padding: 0 20px; }
   .mvv, .checkcols, .steps { grid-template-columns: 1fr; }
   .people, .funds, .roster, .doc-list { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 36px; }
   section.band { padding: 60px 0; }
+  section.band.tight { padding: 48px 0; }
+  .section-head { margin-bottom: 36px; }
+  .navbar .logo img { height: 48px; }
   .hero {
     min-height: auto;
     background-position: 58% center;
@@ -1014,6 +1051,15 @@ footer.site a:hover { color: #fff; text-decoration: underline; }
     line-height: 1.55;
     margin: 16px 0 26px;
   }
-  .hero .actions { align-items: stretch; flex-direction: column; }
-  .hero .btn { text-align: center; }
+  .hero .actions, .cta-band .actions { align-items: stretch; flex-direction: column; }
+  .hero .btn, .cta-band .btn { text-align: center; }
+  .cta-band { padding: 80px 20px; }
+  .info-card .row { flex-direction: column; gap: 2px; }
+  .info-card .row .k { flex: none; }
+  .plan .meta { padding: 16px 20px; }
+  .plan .meta .name { font-size: 22px; }
+  .stat .num { font-size: 34px; }
+  .stat .label { font-size: 13px; letter-spacing: 1.1px; }
+  footer.site { padding-top: 56px; }
+  .footer-legal .wrap { flex-direction: column; gap: 8px; }
 }

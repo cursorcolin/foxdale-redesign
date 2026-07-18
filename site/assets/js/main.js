@@ -5,14 +5,23 @@
 const toggle = document.querySelector('.nav-toggle');
 const nav = document.querySelector('nav.primary');
 if (toggle && nav) {
-  toggle.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
+  const setOpen = (open) => {
+    nav.classList.toggle('open', open);
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.textContent = open ? 'Close' : 'Menu';
+  };
+  toggle.addEventListener('click', () => {
+    setOpen(!nav.classList.contains('open'));
+  });
+  // Close when tapping outside the header or choosing a link
+  document.addEventListener('click', (e) => {
+    if (!nav.classList.contains('open')) return;
+    if (e.target.closest('nav.primary a')) { setOpen(false); return; }
+    if (!e.target.closest('header.site')) setOpen(false);
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav.classList.contains('open')) {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
+      setOpen(false);
       toggle.focus();
     }
   });
