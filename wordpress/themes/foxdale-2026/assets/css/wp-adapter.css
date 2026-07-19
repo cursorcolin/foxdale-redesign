@@ -1,0 +1,185 @@
+/* ============================================================
+   Copyright © 2026 Foxdale Village. All rights reserved.
+   WordPress adapter — bridges core block markup onto the
+   Foxdale design system (assets/css/foxdale.css).
+   ============================================================ */
+
+/* ---------- Block resets ---------- */
+
+.wp-block-image { margin: 0; }
+.wp-block-image img { max-width: 100%; height: auto; }
+
+.wp-block-group { min-width: 0; }
+
+ul.wp-block-list { margin: 0; padding: 0; }
+
+/* ---------- Buttons ----------
+   Pattern buttons carry btn-solid / btn-ghost / btn-ghost-light on the
+   wp-block-button wrapper; the visual styles land on the inner link. */
+
+.wp-block-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.wp-block-button .wp-block-button__link {
+  display: inline-block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 15px 30px;
+  border-radius: 3px;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  background: var(--green-deep);
+  color: #fff;
+  border: 2px solid var(--green-deep);
+}
+
+.wp-block-button .wp-block-button__link:hover { transform: translateY(-1px); }
+
+.wp-block-button.btn-solid .wp-block-button__link:hover {
+  background: var(--green-ink);
+  border-color: var(--green-ink);
+}
+
+.wp-block-button.btn-ghost .wp-block-button__link {
+  background: transparent;
+  color: var(--green-deep);
+  border-color: var(--green-deep);
+}
+
+.wp-block-button.btn-ghost .wp-block-button__link:hover {
+  background: var(--green-deep);
+  color: #fff;
+}
+
+.wp-block-button.btn-ghost-light .wp-block-button__link {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.wp-block-button.btn-ghost-light .wp-block-button__link:hover {
+  background: #fff;
+  color: var(--green-deep);
+}
+
+/* ---------- Primary navigation (core Navigation block) ---------- */
+
+.primary-nav { font-size: 16px; }
+
+.primary-nav .wp-block-navigation-item__content {
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 3px;
+}
+
+.primary-nav .wp-block-navigation-item__content:hover {
+  color: var(--green-deep);
+  background: var(--sage-wash);
+}
+
+.primary-nav .current-menu-item > .wp-block-navigation-item__content {
+  color: var(--green-deep);
+  background: transparent;
+  box-shadow: inset 0 -3px 0 var(--sage);
+  border-radius: 0;
+}
+
+.primary-nav .nav-cta .wp-block-navigation-item__content {
+  background: var(--green-deep);
+  color: #fff;
+  padding: 12px 20px;
+}
+
+.primary-nav .nav-cta .wp-block-navigation-item__content:hover {
+  background: var(--green-ink);
+}
+
+/* Mobile overlay supplied by the Navigation block */
+
+.primary-nav .wp-block-navigation__responsive-container.is-menu-open {
+  background: var(--paper);
+  padding: 80px 24px 24px;
+}
+
+.primary-nav .wp-block-navigation__responsive-container.is-menu-open .nav-cta .wp-block-navigation-item__content {
+  margin-top: 10px;
+}
+
+.primary-nav .wp-block-navigation__responsive-container-open,
+.primary-nav .wp-block-navigation__responsive-container-close {
+  color: var(--green-deep);
+}
+
+/* ---------- Header ---------- */
+
+.navbar .wp-block-site-logo img { height: 58px; width: auto; }
+
+/* ---------- Hero backgrounds ----------
+   Heroes and CTA bands are groups with an absolutely-positioned image
+   behind the content; the gradient overlays come from foxdale.css. */
+
+.hero, .page-hero, .cta-band { position: relative; }
+
+.wp-block-image.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  margin: 0;
+}
+
+.wp-block-image.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Footer ---------- */
+
+footer.site ul { list-style: none; margin: 0; padding: 0; }
+
+.wp-block-image.footlogo-wrap { margin-bottom: 20px; }
+.wp-block-image.footlogo-wrap img { height: 64px; width: auto; }
+
+.footer-legal p { margin: 0; }
+
+/* ---------- Small content helpers ---------- */
+
+.contact-intro { margin: 16px 0 8px; color: var(--ink-soft); }
+
+.roster .entry p { margin: 0; }
+.info-card .row p { margin: 0; }
+.utility p { margin: 0; }
+.stat p { margin: 0; }
+
+/* Card "read more" links now live inside a paragraph */
+.card p.more-wrap { flex: 0 0 auto; margin-top: 18px; }
+.card p.more-wrap + p.more-wrap { margin-top: 0; }
+
+/* Buttons inside tight bands (Careers / Giving quick links) center up */
+.band.tight .wrap > .wp-block-buttons { justify-content: center; }
+
+/* Plain links inside CTA bands stay white */
+.cta-band a:not(.wp-block-button__link) { color: #fff; }
+
+/* Stacked info cards on the Visit page */
+.info-card + .info-card { margin-top: 28px; }
+
+/* Document list entries are paragraphs wrapping the PDF link */
+.doc-list p { margin: 0; display: flex; }
+.doc-list p > a { flex: 1; }
+
+/* Form-plugin placeholder shown until a real form block is inserted */
+
+.form-placeholder {
+  border: 2px dashed var(--sage-light);
+  border-radius: 4px;
+  padding: 28px;
+  margin-top: 20px;
+  color: var(--ink-soft);
+  background: var(--sage-wash);
+}

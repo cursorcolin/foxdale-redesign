@@ -1,0 +1,16 @@
+/* ============================================================
+   Copyright © 2026 Foxdale Village. All rights reserved.
+   Editor-only overrides.
+
+   The front end animates .reveal sections in with main.js
+   (IntersectionObserver adds the .in class on scroll). That
+   script doesn't run in the block editor, so without this
+   override every .reveal section would sit at opacity 0 and
+   the page would look empty below the hero.
+   ============================================================ */
+
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}

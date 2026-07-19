@@ -1,0 +1,64 @@
+# Local WordPress development environment for the Foxdale Village theme.
+#
+#   cd wordpress
+#   docker compose up -d
+#   docker compose run --rm cli core install --url=http://localhost:8080 \
+#     --title="Foxdale Village" --admin_user=admin --admin_password=admin \
+#     --admin_email=admin@example.com --skip-email
+#   docker compose run --rm cli theme activate foxdale-2026
+#   docker compose run --rm cli rewrite structure '/%postname%/'
+#   docker compose run --rm cli eval-file /opt/foxdale/seed/seed.php
+#
+# Site:  http://localhost:8080   Admin: http://localhost:8080/wp-admin (admin/admin)
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      retries: 12
+
+  wordpress:
+    image: wordpress:6.9
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    volumes:
+      - wp_data:/var/www/html
+      - ./themes/foxdale-2026:/var/www/html/wp-content/themes/foxdale-2026
+      - ./seed:/opt/foxdale/seed:ro
+
+  cli:
+    image: wordpress:cli
+    depends_on:
+      db:
+        condition: service_healthy
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    volumes:
+      - wp_data:/var/www/html
+      - ./themes/foxdale-2026:/var/www/html/wp-content/themes/foxdale-2026
+      - ./seed:/opt/foxdale/seed:ro
+
+volumes:
+  db_data:
+  wp_data:
