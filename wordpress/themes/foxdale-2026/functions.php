@@ -22,6 +22,7 @@ function foxdale_setup() {
 		foxdale_fonts_url(),
 		'assets/css/foxdale.css',
 		'assets/css/wp-adapter.css',
+		'assets/css/editor.css',
 	) );
 }
 add_action( 'after_setup_theme', 'foxdale_setup' );
